@@ -13,7 +13,7 @@ const AWS = require('aws-sdk')
   per X-hours rather than multiple instances at once,
   so this is a fair tradeoff. */
 
-exports.handler = (event, context) => {
+exports.handler = (event, context, callback) => {
   if (process.env.LAMBDA_DEBUG_LOG) {
     console.log('LAMBDA EVENT', event);
   }
@@ -23,7 +23,17 @@ exports.handler = (event, context) => {
     }
   }
   if (!event.command) {
-    return require('./dist/index');
+    const index = require('./dist/index');
+    index.start()
+      .then(() => {
+        console.log('done index');
+        console.log('remaining time =', context.getRemainingTimeInMillis());
+        callback(null, 'done');
+      })
+      .catch(err => {
+        console.log('error loading index: ', err);
+        callback(err);
+      });
   }
   // handle a custom command sent as an event
 };

@@ -54,7 +54,7 @@ describe('connect to braintree', () => {
 
     assert.equal(results.length, testTransactions.length);
     assert.ok(1);
-  }).timeout(10000);
+  }).timeout(200000);
 });
 
 describe('upload braintree transaction data to csv', () => {
@@ -64,7 +64,7 @@ describe('upload braintree transaction data to csv', () => {
 
   it('gets min/max transaction timestamps from redshift', async () => {
     redshiftTimestamps = await redshift.createdAtTimestamps('transactions');
-  }).timeout(10000);
+  }).timeout(200000);
 
   it('writes braintree transaction data to csv and uploads to s3', async () => {
     await braintree.uploadToS3('transactions', redshiftTimestamps, fileName);
@@ -72,11 +72,11 @@ describe('upload braintree transaction data to csv', () => {
 
   it('copies data from s3 to redshift table', async () => {
     await redshift.copyFromS3('transactions', fileName);
-  }).timeout(60000);
+  }).timeout(200000);
 
   it('drops transaction dupes from redshift', async () => {
     await redshift.dropDupes('transactions');
-  }).timeout(10000);
+  }).timeout(200000);
 });
 
 

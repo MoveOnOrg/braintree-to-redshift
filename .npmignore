@@ -1,9 +1,6 @@
 **/node_modules
-dist/*
 logs/*
 tmp/*
-claudia.json
-production-env.json
 npm-debug.log
 .env
 .DS_Store

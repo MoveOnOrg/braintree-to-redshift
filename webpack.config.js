@@ -8,6 +8,7 @@ module.exports = {
   entry: ['babel-polyfill', './lib/index.js'],
   target: 'node',
   output: {
+    libraryTarget: 'commonjs',
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
   },
@@ -21,9 +22,18 @@ module.exports = {
       loader: 'babel-loader',
       query: {
         presets: ['es2015', 'es2017', 'stage-2'],
-        plugins: ['transform-runtime'],
+        plugins: ['transform-runtime', 'transform-remove-strict-mode'],
       },
-    }],
+    },
+      {
+        loader: 'json-loader',
+        include: /\.json$/,
+      },
+      {
+        loader: 'octal-number-loader',
+        include: /\/node_modules\/node-redshift\/lib\/model\.js/,
+      },
+    ],
   },
   plugins: (
     process.env.NO_ENV_CHANGE
@@ -32,7 +42,7 @@ module.exports = {
         new CleanWebpack(['dist']),
         new Dotenv({
           path: '.env',
-          safe: true,
+          safe: false,
         }),
         new UglifyJS(),
         new webpack.EnvironmentPlugin({
