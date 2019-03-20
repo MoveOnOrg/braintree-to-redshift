@@ -20,46 +20,46 @@ describe('connect to redshift', () => {
   });
 });
 
-describe('connect to braintree', () => {
-  const startedAt = new Date();
-
-  it('create sandbox transactions', async () => {
-    const testTransactions = [
-      { paymentMethodNonce: 'fake-valid-nonce', amount: '5' },
-      { paymentMethodNonce: 'fake-valid-no-billing-address-nonce', amount: '100' },
-      { paymentMethodNonce: 'fake-valid-visa-nonce', amount: '5' },
-      { paymentMethodNonce: 'fake-valid-visa-nonce', amount: '33.12' },
-      { paymentMethodNonce: 'fake-valid-amex-nonce', amount: '5.50' },
-      { paymentMethodNonce: 'fake-valid-mastercard-nonce', amount: '12.11' },
-      { paymentMethodNonce: 'fake-valid-discover-nonce', amount: '1' },
-      { paymentMethodNonce: 'fake-processor-declined-visa-nonce', amount: '5' },
-      { paymentMethodNonce: 'fake-processor-declined-mastercard-nonce', amount: '5.50' },
-      { paymentMethodNonce: 'fake-processor-declined-amex-nonce', amount: '33.33' },
-      { paymentMethodNonce: 'fake-gateway-rejected-fraud-nonce', amount: '500.12' },
-    ];
-
-    await Promise.all(testTransactions.map(async ({ paymentMethodNonce, amount }) => (
-      braintree.client.transaction.sale({
-        paymentMethodNonce,
-        amount,
-        options: { submitForSettlement: true },
-      })
-    )));
-
-    const searchStream = braintree.client.transaction.search(search => (
-      search.createdAt().min(startedAt)
-    ));
-
-    const results = await streamToPromise(searchStream);
-
-    assert.equal(results.length, testTransactions.length);
-    assert.ok(1);
-  }).timeout(200000);
-});
+// describe('connect to braintree', () => {
+//   const startedAt = new Date();
+//
+//   it('create sandbox transactions', async () => {
+//     const testTransactions = [
+//       { paymentMethodNonce: 'fake-valid-nonce', amount: '5' },
+//       { paymentMethodNonce: 'fake-valid-no-billing-address-nonce', amount: '100' },
+//       { paymentMethodNonce: 'fake-valid-visa-nonce', amount: '5' },
+//       { paymentMethodNonce: 'fake-valid-visa-nonce', amount: '33.12' },
+//       { paymentMethodNonce: 'fake-valid-amex-nonce', amount: '5.50' },
+//       { paymentMethodNonce: 'fake-valid-mastercard-nonce', amount: '12.11' },
+//       { paymentMethodNonce: 'fake-valid-discover-nonce', amount: '1' },
+//       { paymentMethodNonce: 'fake-processor-declined-visa-nonce', amount: '5' },
+//       { paymentMethodNonce: 'fake-processor-declined-mastercard-nonce', amount: '5.50' },
+//       { paymentMethodNonce: 'fake-processor-declined-amex-nonce', amount: '33.33' },
+//       { paymentMethodNonce: 'fake-gateway-rejected-fraud-nonce', amount: '500.12' },
+//     ];
+//
+//     await Promise.all(testTransactions.map(async ({ paymentMethodNonce, amount }) => (
+//       braintree.client.transaction.sale({
+//         paymentMethodNonce,
+//         amount,
+//         options: { submitForSettlement: true },
+//       })
+//     )));
+//
+//     const searchStream = braintree.client.transaction.search(search => (
+//       search.createdAt().min(startedAt)
+//     ));
+//
+//     const results = await streamToPromise(searchStream);
+//
+//     assert.equal(results.length, testTransactions.length);
+//     assert.ok(1);
+//   }).timeout(200000);
+// });
 
 describe('upload braintree transaction data to csv', () => {
   const batchTimestamp = Date.now();
-  const fileName = `transactions_${batchTimestamp}.csv`;
+  const fileName = `/tmp/transactions_${batchTimestamp}.csv`;
   let redshiftTimestamps = null;
 
   it('gets min/max transaction timestamps from redshift', async () => {
