@@ -59,20 +59,20 @@ describe('connect to redshift', () => {
 
 describe('upload braintree transaction data to csv', () => {
   const batchTimestamp = Date.now();
-  const fileName = `/tmp/transactions_${batchTimestamp}.csv`;
+  const fileName = `transactions_${batchTimestamp}.csv`;
   let redshiftTimestamps = null;
 
   it('gets min/max transaction timestamps from redshift', async () => {
     redshiftTimestamps = await redshift.createdAtTimestamps('transactions');
   }).timeout(200000);
 
-  it('writes braintree transaction data to csv and uploads to s3', async () => {
-    await braintree.uploadToS3('transactions', redshiftTimestamps, fileName);
-  }).timeout(200000);
-
-  it('copies data from s3 to redshift table', async () => {
-    await redshift.copyFromS3('transactions', fileName);
-  }).timeout(200000);
+  // it('writes braintree transaction data to csv and uploads to s3', async () => {
+  //   await braintree.uploadToS3('transactions', redshiftTimestamps, fileName);
+  // }).timeout(200000);
+  //
+  // it('copies data from s3 to redshift table', async () => {
+  //   await redshift.copyFromS3('transactions', fileName);
+  // }).timeout(200000);
 
   it('drops transaction dupes from redshift', async () => {
     await redshift.dropDupes('transactions');
