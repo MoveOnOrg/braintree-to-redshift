@@ -8,7 +8,7 @@
     "aws-sdk": "^2.185.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2017": "^6.24.1",
-    "braintree": "^2.5.0",
+    "braintree": "^2.17.0",
     "claudia": "^3.3.1",
     "csv-write-stream": "^2.0.0",
     "dotenv-safe": "^4.0.4",
