@@ -5,7 +5,7 @@
   "author": "Cody Gordon",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.185.0",
+    "aws-sdk": "^2.469.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2017": "^6.24.1",
     "braintree": "^2.5.0",
